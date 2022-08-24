@@ -17,7 +17,7 @@ function Home() {
 
   useEffect(() =>{
     const fetchPlayers = async () => {
-        const res = await axios.get(`http://round-robin-chess.herokuapp.com/`);
+        const res = await axios.get(`/`);
         setData(res.data);
     }
     fetchPlayers();
@@ -25,7 +25,7 @@ function Home() {
   }, [])
 
   useEffect(() =>{
-    axios.get('http://round-robin-chess.herokuapp.com/login').then(response => {
+    axios.get('/login').then(response => {
       setToken(response.data.token)
       cookies.set("TOKEN", response.data.token)
     })
@@ -37,7 +37,7 @@ function Home() {
   axios.defaults.withCredentials = true
 
   function sendLoginData(){
-    axios.post('http://round-robin-chess.herokuapp.com/login',{
+    axios.post('/login',{
       username: username,
       password: password
     }).then(response => {
@@ -47,7 +47,7 @@ function Home() {
   }
 
   function logout(){
-    axios.get('http://round-robin-chess.herokuapp.com/logout').then(response => {
+    axios.get('/logout').then(response => {
       setToken('');
       cookies.remove("TOKEN");
       navigate(0);

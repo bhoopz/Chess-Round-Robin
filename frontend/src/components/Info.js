@@ -15,7 +15,7 @@ function Info() {
 
   useEffect(() =>{
     const fetchTournament = async () => {
-        const res = await axios.get(`http://localhost:5000/tournament/${tournamentName}`);
+        const res = await axios.get(`/tournament/${tournamentName}`);
         setData(res.data);
         setRounds(res.data.rounds)
         setPlayers(res.data.players)

@@ -32,7 +32,7 @@ export default function Create(props){
 
     useEffect(() =>{
         const fetchPlayers = async () => {
-            const res = await axios.get(`http://localhost:5000/create-tournament?q=${query}`);
+            const res = await axios.get(`/create-tournament?q=${query}`);
             setData(res.data);
         }
         fetchPlayers();
@@ -51,7 +51,7 @@ export default function Create(props){
         }else if(/^\d+$/.test(tournamentName)){
             setErrorMessage('Incorrect tournament name');
         }else{
-            axios.post('http://localhost:5000/create-tournament',{
+            axios.post('/create-tournament',{
                 arrayOfPlayers: arrayOfPlayers,
                 tournamentName: tournamentName,
                 type: type,
@@ -65,7 +65,7 @@ export default function Create(props){
     }
 
     function addNewPlayer(){
-        axios.post('http://localhost:5000/create-tournament/add',{
+        axios.post('/create-tournament/add',{
             name: name,
             lastName: lastName,
             federation: federation,

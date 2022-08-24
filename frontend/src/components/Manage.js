@@ -50,7 +50,7 @@ export default function Manage(props){
 
 
     const getPairs = () => {
-        axios.get('http://localhost:5000/manage/'+tournamentName+'/round/'+roundNumber)
+        axios.get('/manage/'+tournamentName+'/round/'+roundNumber)
         .then(res => {
             if(res.data.rounds[roundNumber-1] !== undefined) {
                 let allPairs = res.data.rounds[roundNumber-1].pairs
@@ -117,7 +117,7 @@ export default function Manage(props){
 
   function sendRoundInfo(decision){
       
-    axios.post('http://localhost:5000/manage/'+tournamentName+'/round/'+roundNumber, {
+    axios.post('/manage/'+tournamentName+'/round/'+roundNumber, {
         scores: scores,
         roundNumber: roundNumber,
         decision: decision
