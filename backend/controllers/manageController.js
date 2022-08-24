@@ -2,7 +2,7 @@ const {Tournament} = require('../models/tournament');
 const Player = require('../models/player');
 var EloRating = require('elo-rating');
 
-const getTournament = (req, res) => {
+const getTournamentToManage = (req, res) => {
 
     Tournament.findOne({name: req.params.tournamentName}).populate({
         path: `rounds.pairs`,
@@ -130,4 +130,4 @@ function drawCondition(firstPlayerElo, secondPlayerElo){
     return [parseInt((result.playerRating - firstPlayerElo)/2 + (result2.playerRating - firstPlayerElo)/2), parseInt((result.opponentRating - secondPlayerElo)/2 + (result2.opponentRating - secondPlayerElo)/2)]
 }
 
-module.exports = {getTournament, postScores};
+module.exports = {getTournamentToManage, postScores};

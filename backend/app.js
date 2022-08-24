@@ -4,10 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
-
 var tournamentRouter = require('./routes/tournament');
 var indexRouter = require('./routes/index');
 var manageRouter = require('./routes/manage');
+const config = require('./config');
+const sessions = require('express-session');
+const User = require('./models/user');
+
+const JWT_SECRET = config.SECRET;
 
 
 
@@ -17,12 +21,57 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+const halfDay = 1000 * 60 * 60 * 12;
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+
+app.use(sessions({
+  secret: JWT_SECRET,
+  saveUninitialized: false,
+  cookie: { maxAge: halfDay, 
+    sameSite: true,
+    secure: false
+  },
+  resave: false,
+  
+}));
+
+
+app.use((req, res, next) => {
+
+  if (!(req.session && req.session.userToken)) {
+    return next();
+  }
+
+  User.findById(req.session.userID, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return next();
+    }
+
+    user.password = undefined;
+    req.user = user;
+    res.locals.user = user;
+
+    next();
+    });
+})
+
+
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  credentials: true
+}));
 
 app.use('/', indexRouter);
 app.use('/manage', manageRouter);
@@ -30,8 +79,12 @@ app.use('/create-tournament', tournamentRouter);
 
 app.disable('etag');
 
+
+
+
+
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
