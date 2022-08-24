@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import Cookies from "universal-cookie";
+
 
   
 
@@ -19,7 +21,9 @@ export default function Manage(props){
     let [endRound, setEndRound] = useState(false)
     const [lastRound, setLastRound] = useState('')
     const navigate = useNavigate();
-    const [openDialog, setOpenDialog] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false);
+    const cookies = new Cookies();
+
 
     const useStyles = makeStyles({
         leftButton: {
@@ -37,6 +41,13 @@ export default function Manage(props){
     })
 
     const classes = useStyles()
+
+    useEffect(() =>{
+        if(!cookies.get("TOKEN")){
+          navigate('/')
+        }
+    }, [])
+
 
     const getPairs = () => {
         axios.get('http://localhost:5000/manage/'+tournamentName+'/round/'+roundNumber)
@@ -110,7 +121,7 @@ export default function Manage(props){
         scores: scores,
         roundNumber: roundNumber,
         decision: decision
-    }).then(lastRound != roundNumber ? navigate(`/manage/${tournamentName}/round/${parseInt(roundNumber)+1}`) : navigate(`/tournament/${tournamentName}`))
+    }).then(lastRound != roundNumber ? navigate(`/manage/${tournamentName}/round/${parseInt(roundNumber)+1}`) : (navigate(`/tournament/${tournamentName}`), navigate(0)))
   }
 
   function displayDialog(){

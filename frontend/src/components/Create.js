@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import DatePicker from 'react-date-picker'
+import DatePicker from 'react-date-picker';
+import Cookies from "universal-cookie";
+
 
 
 export default function Create(props){
@@ -27,6 +28,7 @@ export default function Create(props){
     const [sex, setSex] = useState('Male');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const cookies = new Cookies();
 
     useEffect(() =>{
         const fetchPlayers = async () => {
@@ -36,6 +38,13 @@ export default function Create(props){
         fetchPlayers();
     }, [query])
 
+    useEffect(() =>{
+        if(!cookies.get("TOKEN")){
+          navigate('/')
+        }
+    }, [])
+
+   
     function createTournament(){
         if(tournamentName.length < 8){
             setErrorMessage('Please enter at least 8 characters tournament name');
