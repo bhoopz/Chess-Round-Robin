@@ -1,16 +1,13 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const {getAllTournaments, getTournament, loginInfo, ifLogged, logout, isUserAuth} = require('../controllers/indexController');
-
-
+const {
+  getAllTournaments,
+  getTournament,
+} = require("../controllers/indexController");
 
 /* GET home page. */
 
-router.route('/').get(getAllTournaments)
-router.route('/tournament/:tournamentName').get(getTournament);
-router.route('/login').post(loginInfo).get(ifLogged);
-router.route('/logout').get(logout);
-
-
+router.route("/").get(getAllTournaments);
+router.route("/tournaments/:tournamentName").get(getTournament);
 
 module.exports = router;
